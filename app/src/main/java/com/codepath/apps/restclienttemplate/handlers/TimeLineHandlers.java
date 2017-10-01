@@ -7,6 +7,7 @@ import com.codepath.apps.restclienttemplate.TwitterClient;
 import com.codepath.apps.restclienttemplate.adapters.TweetAdapter;
 import com.codepath.apps.restclienttemplate.data.Tweet;
 import com.codepath.apps.restclienttemplate.mvp.TimeLinePresenter;
+import com.codepath.apps.restclienttemplate.mvp.TweetPostPresenter;
 import com.github.scribejava.apis.TwitterApi;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -57,6 +58,42 @@ public class TimeLineHandlers {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 Log.d(TAG, "onSuccess object response" + response.toString());
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                Log.d(TAG, "onFailure object response" + errorResponse.toString());
+                throwable.printStackTrace();
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                Log.d(TAG, "onFailure Array response" + errorResponse.toString());
+                throwable.printStackTrace();
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                Log.d(TAG, "headers response" + responseString.toString());
+                throwable.printStackTrace();
+            }
+        });
+    }
+
+    public void postTweet(final TweetPostPresenter presenter, String tweet){
+        mTwitterClient = TwitterApp.getRestClient();
+        mTwitterClient.postTweet(tweet, new JsonHttpResponseHandler() {
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                Log.d(TAG, "onSuccess Array response" + response.toString());
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                Log.d(TAG, "onSuccess object response" + response.toString());
+                Tweet tweet = Tweet.fromJson(response);
+                presenter.displayNewTweet(tweet);
             }
 
             @Override

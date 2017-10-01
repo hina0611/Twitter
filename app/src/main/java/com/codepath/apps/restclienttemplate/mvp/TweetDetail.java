@@ -5,6 +5,8 @@ import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.codepath.apps.restclienttemplate.R;
@@ -21,14 +23,14 @@ public class TweetDetail extends AppCompatActivity {
 
     public static final String TWEET_RESPONSE = "TweetResponse";
 
-    protected TextView mTvTweetUserName;
-    //    protected ImageView mImgUserProfile;
-//    protected TextView mTvTweetScreenName;
-//    protected TextView mTvTweetHours;
-//    protected TextView mTvTweetDescription;
-//    protected ImageView mImgUserTweetProfile;
-//    protected TextView mTvImgDescription;
-//    protected TextView mTvFavouriteCount;
+    protected TextView mTvTweetUserNameDetail;
+    protected ImageView mImgUserProfileDetail;
+    protected TextView mTvTweetScreenNameDetail;
+    protected TextView mTvTweetHoursDetail;
+    protected TextView mTvTweetDescriptionDetail;
+    protected ImageView mImgUserTweetProfileDetail;
+    protected TextView mTvImgDescriptionDetail;
+    protected TextView mTvFavouriteCountDetail;
     private Tweet mTweet;
     public TweetAdapter mTweetAdapter;
 
@@ -42,6 +44,10 @@ public class TweetDetail extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tweet_dialog);
 
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setTitle("Twitter Deatils");
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -57,20 +63,20 @@ public class TweetDetail extends AppCompatActivity {
 
     private void renderTweetView() {
         if (mTweet != null) {
-            mTvTweetUserName.setText(mTweet.getUser().getName());
+            mTvTweetUserNameDetail.setText(mTweet.getUser().getName());
 
         }
     }
 
     private void initView() {
-        mTvTweetUserName = (TextView) findViewById(R.id.tv_tweet_user_name);
-//        mImgUserProfile = (ImageView) view.findViewById(R.id.img_user_profile_pic);
-//        mTvTweetScreenName = (TextView) view.findViewById(R.id.tv_tweet_user_screen_name);
-//        mTvTweetHours = (TextView) view.findViewById(R.id.tv_tweet_addedd_timeline);
-//        mTvTweetDescription = (TextView) view.findViewById(R.id.tv_tweet_description);
-//        mImgUserTweetProfile = (ImageView) view.findViewById(R.id.img_user_tweet_profile);
-//        mTvImgDescription = (TextView) view.findViewById(R.id.tv_img_description);
-//        mTvFavouriteCount = (TextView) view.findViewById(R.id.tv_favourite_count);
+        mTvTweetUserNameDetail = (TextView) findViewById(R.id.tv_tweet_user_name);
+        mImgUserProfileDetail = (ImageView) findViewById(R.id.img_user_profile_pic);
+        mTvTweetScreenNameDetail = (TextView) findViewById(R.id.tv_tweet_user_screen_name);
+        mTvTweetHoursDetail = (TextView) findViewById(R.id.tv_tweet_addedd_timeline);
+        mTvTweetDescriptionDetail = (TextView) findViewById(R.id.tv_tweet_description);
+        mImgUserTweetProfileDetail = (ImageView) findViewById(R.id.img_user_tweet_profile);
+        mTvImgDescriptionDetail = (TextView) findViewById(R.id.tv_img_description);
+        mTvFavouriteCountDetail = (TextView) findViewById(R.id.tv_favourite_count);
     }
 
 }

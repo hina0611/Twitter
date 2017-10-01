@@ -2,14 +2,9 @@ package com.codepath.apps.restclienttemplate.adapters;
 
 import android.app.PendingIntent;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.MediaPlayer;
-import android.net.Uri;
-import android.support.customtabs.CustomTabsIntent;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +21,7 @@ import com.codepath.apps.restclienttemplate.mvp.TimelineActivity;
 import com.codepath.apps.restclienttemplate.mvp.TweetDetail;
 import com.codepath.apps.restclienttemplate.utils.AppUtils;
 import com.malmstein.fenster.controller.FensterPlayerControllerVisibilityListener;
+import com.malmstein.fenster.controller.MediaFensterPlayerController;
 import com.malmstein.fenster.controller.SimpleMediaFensterPlayerController;
 import com.malmstein.fenster.view.FensterVideoView;
 
@@ -44,6 +40,7 @@ public class TweetAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     //private Context mContext;
     private TimelineActivity mTimelineActivity;
     private List<Tweet> mTweets;
+    private List<Long> mTweetIds;
     private LayoutInflater mLayoutInflater;
 
 
@@ -63,7 +60,23 @@ public class TweetAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             mTweets = new ArrayList<Tweet>();
         }
 
-        mTweets.addAll(tweets);
+        if (mTweetIds == null) {
+            mTweetIds = new ArrayList<Long>();
+        }
+
+        for (Tweet tweet : tweets) {
+            if (mTweetIds.indexOf(tweet.getUid()) == -1) {
+                mTweetIds.add(tweet.getUid());
+                mTweets.add(tweet);
+            } else {
+                Log.d(" ", "Found duplicate tweet: " + tweet.getUid());
+            }
+
+        }
+    }
+
+    public void insertTweetAt(Tweet tweet, int index) {
+        mTweets.add(index, tweet);
     }
 
 
@@ -71,12 +84,6 @@ public class TweetAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         mLayoutInflater = LayoutInflater.from(mTimelineActivity);
         RecyclerView.ViewHolder mViewHolder = null;
-
-
-//        // Inflate the custom layout
-//        View tweetView = mLayoutInflater.inflate(R.layout.activity_tweet, parent, false);
-//        // Return a new holder instance
-//        ViewHolder viewHolder = new ViewHolder(tweetView);
 
         switch (viewType){
             case IMAGE: {
@@ -100,93 +107,63 @@ public class TweetAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         final Tweet tweet = mTweets.get(position); // get data as per position
         User user = tweet.getUser();
         Entity entity = tweet.getEntity();
+        Log.d("TweetAdapter.onBindView", "Displaying tweet: " + tweet.getUid());
 
+        if (holder instanceof ViewHolder) {
+            ViewHolder viewHolder = (ViewHolder) holder;
+            viewHolder.mTvTweetUserName.setText(tweet.getUser().getName());
+            viewHolder.mTvTweetScreenName.setText("@" + tweet.getUser().getScreenName());
+            viewHolder.mTvTweetDescription.setText(AppUtils.fromHtml(tweet.getBody()));
+            viewHolder.mTvTweetHours.setText(AppUtils.getTwitterDateFormat(tweet.getCreatedAt()));
+            viewHolder.mTvFavouriteCount.setText(String.valueOf(tweet.getFavCount()));
+            Glide.with(holder.itemView.getContext()).load(tweet.getUser().getProfileImageUrl()).into(viewHolder.mImgUserProfile);
 
-        switch (holder.getItemViewType()) {
-
-            case IMAGE: {
-
-                ViewHolder viewHolder = (ViewHolder) holder;
-                viewHolder.mTvTweetUserName.setText(tweet.getUser().getName());
-                viewHolder.mTvTweetScreenName.setText("@" + tweet.getUser().getScreenName());
-                viewHolder.mTvTweetDescription.setText(AppUtils.fromHtml(tweet.getBody()));
-                viewHolder.mTvTweetHours.setText(AppUtils.getTwitterDateFormat(tweet.getCreatedAt()));
-                viewHolder.mTvFavouriteCount.setText(String.valueOf(tweet.getFavCount()));
-                Glide.with(holder.itemView.getContext()).load(tweet.getUser().getProfileImageUrl()).into(viewHolder.mImgUserProfile);
-
-
-                List<Media> medias = tweet.getEntity().getMedias();
-                if (medias != null && !medias.isEmpty()) {
-                    Media media = medias.get(0);
-                    if (media.isPhoto()) {
-                        Glide.with(mTimelineActivity).load(media.getMediaURL()).into(viewHolder.mImgUserTweetProfile);
-                    }
+            List<Media> medias = tweet.getEntity().getMedias();
+            if (medias != null && !medias.isEmpty()) {
+                Media media = medias.get(0);
+                if (media.isPhoto()) {
+                    String mediaUrl = media.getMediaURL();
+                    Log.d("TweetAdapter.onBindView", "For tweet: " + tweet.getUid() + ", media Url: " + mediaUrl);
+                    Glide.with(mTimelineActivity).load(media.getMediaURL()).into(viewHolder.mImgUserTweetProfile);
                 }
-
-                viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-//                        CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
-//                        PendingIntent pendingIntent = getPendingIntent(tweet.getUser().getWebUrl());
-//                        Bitmap bitmap = BitmapFactory.decodeResource(mTimelineActivity.getResources(), R.drawable.share_icon);
-//                        builder.setActionButton(bitmap, "Share", pendingIntent);
-//                        CustomTabsIntent intentCustomTab = builder.build();
-//                        intentCustomTab.launchUrl(mTimelineActivity, Uri.parse(tweet.getUser().getWebUrl().toString()));
-//                        builder.setToolbarColor(ContextCompat.getColor(mTimelineActivity, R.color.colorAccent));
-                        mTimelineActivity.displayTweet(tweet);
-                    }
-                });
-
-                viewHolder.mImgReplyTweet.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mTimelineActivity.displayTweet(tweet);
-                    }
-                });
-
-                break;
             }
 
-            case VIDEO: {
 
-                final ViewHolderVideo viewHolderVideo = (ViewHolderVideo) holder;
-                viewHolderVideo.mVTvTweetUserName.setText(tweet.getUser().getName());
-                viewHolderVideo.mVTvTweetScreenName.setText("@" + tweet.getUser().getScreenName());
-                viewHolderVideo.mVTvTweetDescription.setText(Html.fromHtml(tweet.getBody()));
+            viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mTimelineActivity.displayTweet(tweet);
+                }
+            });
 
-                List<Media> medias = tweet.getEntity().getMedias();
-                if (medias != null && !medias.isEmpty()) {
-                    Media media = medias.get(0);
-                    if (media.isVideo()) {
-//                       with(mContext).load(media.getMediaURL()).into(viewHolder.mImgUserTweetProfile);
+            viewHolder.mImgReplyTweet.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mTimelineActivity.displayTweet(tweet);
+                }
+            });
+        } else {
+            final ViewHolderVideo viewHolderVideo = (ViewHolderVideo) holder;
+            viewHolderVideo.mVTvTweetUserName.setText(tweet.getUser().getName());
+            viewHolderVideo.mVTvTweetScreenName.setText("@" + tweet.getUser().getScreenName());
+            viewHolderVideo.mVTvTweetDescription.setText(Html.fromHtml(tweet.getBody()));
 
-//                       ViewHolder.mImgUserTweetProfile.setVisibility(View.GONE);
-//                       final VideoView videoView = holder.mVideoUserTweetProfile;
-//                       videoView.setVisibility(View.VISIBLE);
-//                       Uri uri = Uri.parse("https://video.twimg.com/ext_tw_video/913352683725058048/pu/vid/240x240/vLEdT5Gky1Tk_eY9.mp4");
-//                       videoView.setVideoPath("http://www.ebookfrenzy.com/android_book/movie.mp4");
-//                       videoView.start();
+            if (tweet.getExtendedEntity() != null && tweet.getExtendedEntity().getVideoInfo() != null
+                    && tweet.getExtendedEntity().getVideoInfo().getVariants().size() > 0
+                    && tweet.getExtendedEntity().getVideoInfo().getVariants().get(0) != null) {
 
-                        viewHolderVideo.textureView.setMediaController(viewHolderVideo.fullScreenMediaPlayerController);
-                        viewHolderVideo.textureView.setVideo("https://video.twimg.com/ext_tw_video/913352683725058048/pu/vid/240x240/vLEdT5Gky1Tk_eY9.mp4", viewHolderVideo.fullScreenMediaPlayerController.DEFAULT_VIDEO_START);
-                        viewHolderVideo.textureView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-
-
-                            @Override
-                            public void onPrepared(MediaPlayer mp) {
-                                viewHolderVideo.textureView.start();
-                            }
-                        });
-
-                    }
-
-                    break;
+                if (tweet.getExtendedEntity().getType().equalsIgnoreCase("video")) {
+                    viewHolderVideo.textureViewVideo.setMediaController(viewHolderVideo.fullScreenMediaPlayerController);
+                    viewHolderVideo.textureViewVideo.setVideo(tweet.getExtendedEntity().getVideoInfo().getVariants().get(0).getUrl(),
+                            MediaFensterPlayerController.DEFAULT_VIDEO_START);
+                    viewHolderVideo.textureViewVideo.start();
                 }
 
             }
+
         }
-
     }
+
 
     private PendingIntent getPendingIntent(String url) {
         Intent intent = new Intent(Intent.ACTION_SEND);
@@ -241,8 +218,8 @@ public class TweetAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         protected TextView mVTvTweetHours;
         protected TextView mVTvTweetDescription;
         protected TextView mVTvImgDescription;
-        final  FensterVideoView textureView;
-        final SimpleMediaFensterPlayerController fullScreenMediaPlayerController;
+        final  FensterVideoView textureViewVideo;
+        final MediaFensterPlayerController fullScreenMediaPlayerController;
 
 
         public ViewHolderVideo(View itemView) {
@@ -253,8 +230,8 @@ public class TweetAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             mVTvTweetScreenName = (TextView) itemView.findViewById(R.id.tv_tweet_user_screen_name);
             mVTvTweetHours = (TextView) itemView.findViewById(R.id.tv_tweet_addedd_timeline);
             mVTvTweetDescription = (TextView) itemView.findViewById(R.id.tv_tweet_description);
-            textureView = (FensterVideoView) itemView.findViewById(R.id.play_video_texture);
-            fullScreenMediaPlayerController = (SimpleMediaFensterPlayerController) itemView.findViewById(R.id.play_video_controller);
+            textureViewVideo = (FensterVideoView) itemView.findViewById(R.id.play_video_texture);
+            fullScreenMediaPlayerController = (MediaFensterPlayerController) itemView.findViewById(R.id.play_video_controller);
 
 
         }

@@ -1,11 +1,17 @@
 package com.codepath.apps.restclienttemplate.utils;
 
+import android.content.Context;
 import android.icu.text.SimpleDateFormat;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.text.Html;
 import android.text.Spanned;
 import android.text.format.DateUtils;
 
+import com.codepath.apps.restclienttemplate.TwitterApp;
+
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.Locale;
@@ -54,5 +60,28 @@ public class AppUtils {
         }
         return result;
     }
+
+    public static boolean checkNetwork() {
+        return isNetworkAvailable() && isOnline();
+    }
+
+    private static Boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) TwitterApp.context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
+    }
+
+    private static boolean isOnline() {
+        Runtime runtime = Runtime.getRuntime();
+        try {
+            Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
+            int     exitValue = ipProcess.waitFor();
+            return (exitValue == 0);
+        } catch (IOException e)          { e.printStackTrace(); }
+        catch (InterruptedException e) { e.printStackTrace(); }
+        return false;
+    }
+
 
 }

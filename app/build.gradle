@@ -51,4 +51,5 @@ dependencies {
     compile 'com.android.support:customtabs:25.+'
     compile 'com.malmstein:fenster:0.0.2'
     compile 'com.android.support:design:23.1.0'
+    compile 'de.hdodenhof:circleimageview:1.2.1'
 }

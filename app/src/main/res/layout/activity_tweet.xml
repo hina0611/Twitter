@@ -10,30 +10,34 @@
         app:cardCornerRadius="4dp"
         app:cardElevation="2dp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/linear_tweet_image_view_layout"
-            android:orientation="horizontal">
+        <!--<RelativeLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/linear_tweet_image_view_layout"-->
+            <!--android:orientation="vertical">-->
+
+            <!--<ImageView-->
+                <!--android:layout_width="50dp"-->
+                <!--android:layout_height="50dp"-->
+                <!--android:layout_marginRight="8dp"-->
+                <!--android:layout_toLeftOf="@id/relative_tweet_container"-->
+                <!--android:id="@+id/img_user_profile_pic"/>-->
 
 
-            <ImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
-                android:id="@+id/img_user_profile_pic"
-                android:src="@drawable/facebook"
-                />
-
-
-        </LinearLayout>
+        <!--</RelativeLayout>-->
 
     <RelativeLayout
         android:id="@+id/relative_tweet_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentRight="true">
+        android:layout_height="match_parent">
+
+
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="70dp"
+            android:layout_margin="8dp"
+            android:id="@+id/img_user_profile_pic"/>
+
 
         <RelativeLayout
             android:id="@+id/relative_tweet_user_info_container"
@@ -41,16 +45,19 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:layout_marginStart="45dp"
+            android:layout_marginStart="60dp"
             android:orientation="horizontal"
             android:padding="@dimen/padding_8">
+
 
             <TextView
                 android:id="@+id/tv_tweet_user_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="UserName"
-                android:textSize="@dimen/text_size_10" />
+                android:textSize="@dimen/text_size_16"
+                android:layout_marginLeft="16dp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tv_tweet_user_screen_name"
@@ -59,17 +66,16 @@
                 android:layout_marginLeft="@dimen/padding_8"
                 android:layout_toRightOf="@id/tv_tweet_user_name"
                 android:text="UserId"
-                android:textSize="@dimen/text_size_10" />
+                android:textSize="@dimen/text_size_14" />
 
             <TextView
                 android:id="@+id/tv_tweet_addedd_timeline"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/padding_8"
-                android:layout_marginRight="@dimen/padding_8"
                 android:layout_toRightOf="@id/tv_tweet_user_screen_name"
                 android:text="Number of hours"
-                android:textSize="@dimen/text_size_10" />
+                android:textSize="@dimen/text_size_14" />
 
 
         </RelativeLayout>
@@ -88,17 +94,19 @@
                 android:id="@+id/tv_tweet_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/padding_8"
+                android:layout_marginLeft="34dp"
                 android:layout_marginRight="@dimen/padding_8"
                 android:paddingBottom="16dp"
-                android:text="Description" />
+                android:text="Description"
+                android:textSize="@dimen/text_size_18" />
 
             <ImageView
                 android:id="@+id/img_user_tweet_profile"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="180dp"
                 android:layout_marginRight="8dp"
-                android:src="@drawable/ic_launcher" />
+                android:visibility="visible"
+                android:src="@drawable/ic_launcher"/>
 
         </LinearLayout>
 
@@ -145,7 +153,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="8dp"
                 android:layout_toRightOf="@id/tv_retweet_count"
-                android:src="@drawable/share_icon"/>
+                android:src="@drawable/share_icon" />
 
 
         </RelativeLayout>

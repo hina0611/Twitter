@@ -12,15 +12,13 @@ import java.util.List;
 public class TimeLinePresenter {
 
     TimelineActivity mTimelineActivity;
-    TweetDetail mTweetDetail;
 
-    public TimeLinePresenter(TimelineActivity mTimelineActivity) {
-        this.mTimelineActivity = mTimelineActivity;
+
+    public TimeLinePresenter(TimelineActivity timelineActivity) {
+        this.mTimelineActivity = timelineActivity;
     }
 
-    public TimeLinePresenter(TweetDetail mTweetDetail){
-        this.mTweetDetail = mTweetDetail;
-    }
+
 
     public void fetchTimeLineHandlerData(long maxId){
         TimeLineHandlers handlers = new TimeLineHandlers();
@@ -32,4 +30,5 @@ public class TimeLinePresenter {
             mTimelineActivity.displayTweets(tweets);
         }
     }
+
 }

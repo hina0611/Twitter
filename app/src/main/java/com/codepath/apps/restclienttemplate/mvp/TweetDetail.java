@@ -144,7 +144,7 @@ public class TweetDetail extends AppCompatActivity {
         mTvTweetScreenNameDetail.setText("@" + mTweet.getUser().getScreenName());
         mTvTweetDescriptionDetail.setText(AppUtils.fromHtml(mTweet.getBody()));
         mTvTweetHoursDetail.setText(AppUtils.getTwitterDateFormat(mTweet.getCreatedAt()));
-        mTvFavouriteCountDetail.setText(String.valueOf(mTweet.getFavCount()));
+//        mTvFavouriteCountDetail.setText(String.valueOf(mTweet.getFavCount()));
         Glide.with(this).load(mTweet.getUser().getProfileImageUrl()).into(mImgUserProfileDetail);
 
 
@@ -161,7 +161,7 @@ public class TweetDetail extends AppCompatActivity {
         mTvTweetDescriptionDetail = (TextView) findViewById(R.id.tv_tweet_description);
         mImgUserTweetProfileDetail = (ImageView) findViewById(R.id.img_user_tweet_profile);
         mTvImgDescriptionDetail = (TextView) findViewById(R.id.tv_img_description);
-        mTvFavouriteCountDetail = (TextView) findViewById(R.id.tv_favourite_count);
+//        mTvFavouriteCountDetail = (TextView) findViewById(R.id.tv_favourite_count);
         video = (FensterVideoView) findViewById(R.id.details_video);
         controller = (MediaFensterPlayerController)  findViewById(R.id.details_controller);
     }

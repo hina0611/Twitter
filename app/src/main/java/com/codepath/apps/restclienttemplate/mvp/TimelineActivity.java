@@ -1,6 +1,7 @@
 package com.codepath.apps.restclienttemplate.mvp;
 
 import android.Manifest;
+import android.app.ActionBar;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
@@ -16,12 +17,15 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.codepath.apps.restclienttemplate.R;
 import com.codepath.apps.restclienttemplate.TwitterApp;
 import com.codepath.apps.restclienttemplate.TwitterClient;
 import com.codepath.apps.restclienttemplate.adapters.TweetAdapter;
 import com.codepath.apps.restclienttemplate.data.Tweet;
+import com.codepath.apps.restclienttemplate.utils.AppUtils;
 import com.codepath.apps.restclienttemplate.utils.EndlessRecyclerViewScrollListener;
 
 import java.util.ArrayList;
@@ -66,6 +70,17 @@ public class TimelineActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.main_menu, menu);
         return true;
     }
+
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if(!AppUtils.checkNetwork()){
+            Toast.makeText(this, "No Internet available", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
 
 
     private void fetchTimeLineHandlerData(long maxId){

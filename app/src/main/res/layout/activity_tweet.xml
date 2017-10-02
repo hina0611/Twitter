@@ -89,6 +89,7 @@
                 android:paddingBottom="16dp"
                 android:textColor="@color/color_black"
                 android:text="Description"
+                android:clickable="true"
                 android:autoLink="all"
                 android:textSize="@dimen/text_size_18" />
 
@@ -97,58 +98,59 @@
                 android:layout_width="match_parent"
                 android:layout_height="180dp"
                 android:layout_marginRight="8dp"
+                android:layout_marginBottom="16dp"
                 android:visibility="gone"
                 android:src="@drawable/ic_launcher"/>
 
         </LinearLayout>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/linear_tweet_user_info_container">
+        <!--<RelativeLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_below="@id/linear_tweet_user_info_container">-->
 
-            <ImageView
-                android:id="@+id/img_favourite"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="8dp"
-                android:src="@drawable/ic_favorite" />
+            <!--<ImageView-->
+                <!--android:id="@+id/img_favourite"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginLeft="16dp"-->
+                <!--android:layout_marginRight="8dp"-->
+                <!--android:src="@drawable/ic_favorite" />-->
 
-            <TextView
-                android:id="@+id/tv_favourite_count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/img_favourite"
-                android:text="Fv count" />
+            <!--<TextView-->
+                <!--android:id="@+id/tv_favourite_count"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_toRightOf="@id/img_favourite"-->
+                <!--android:text="Fv count" />-->
 
-            <ImageView
-                android:id="@+id/img_retweet"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="8dp"
-                android:layout_toRightOf="@id/tv_favourite_count"
-                android:src="@drawable/ic_favorite" />
+            <!--<ImageView-->
+                <!--android:id="@+id/img_retweet"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginLeft="16dp"-->
+                <!--android:layout_marginRight="8dp"-->
+                <!--android:layout_toRightOf="@id/tv_favourite_count"-->
+                <!--android:src="@drawable/ic_favorite" />-->
 
-            <TextView
-                android:id="@+id/tv_retweet_count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/img_retweet"
-                android:text="Fv count" />
+            <!--<TextView-->
+                <!--android:id="@+id/tv_retweet_count"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_toRightOf="@id/img_retweet"-->
+                <!--android:text="Fv count" />-->
 
-            <ImageView
-                android:id="@+id/img_reply"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="8dp"
-                android:layout_toRightOf="@id/tv_retweet_count"
-                android:src="@drawable/share_icon" />
+            <!--<ImageView-->
+                <!--android:id="@+id/img_reply"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginLeft="16dp"-->
+                <!--android:layout_marginRight="8dp"-->
+                <!--android:layout_toRightOf="@id/tv_retweet_count"-->
+                <!--android:src="@drawable/share_icon" />-->
 
 
-        </RelativeLayout>
+        <!--</RelativeLayout>-->
 
     </RelativeLayout>
 

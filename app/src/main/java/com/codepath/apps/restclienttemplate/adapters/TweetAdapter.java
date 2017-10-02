@@ -5,12 +5,9 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Build;
-import android.provider.Settings;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,24 +22,20 @@ import com.codepath.apps.restclienttemplate.data.Media;
 import com.codepath.apps.restclienttemplate.data.Tweet;
 import com.codepath.apps.restclienttemplate.data.User;
 import com.codepath.apps.restclienttemplate.mvp.TimelineActivity;
-import com.codepath.apps.restclienttemplate.mvp.TweetDetail;
 import com.codepath.apps.restclienttemplate.utils.AppUtils;
 import com.malmstein.fenster.controller.FensterPlayerControllerVisibilityListener;
 import com.malmstein.fenster.controller.MediaFensterPlayerController;
-import com.malmstein.fenster.controller.SimpleMediaFensterPlayerController;
 import com.malmstein.fenster.view.FensterVideoView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.media.CamcorderProfile.get;
-import static com.bumptech.glide.Glide.with;
 
 /**
  * Created by hinaikhan on 9/29/17.
  */
 
-public class TweetAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements FensterPlayerControllerVisibilityListener{
+public class TweetAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements FensterPlayerControllerVisibilityListener {
 
     //private Context mContext;
     private TimelineActivity mTimelineActivity;
@@ -53,8 +46,6 @@ public class TweetAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     private final int IMAGE = 0;
     private final int VIDEO = 1;
-
-
 
 
     public TweetAdapter(TimelineActivity timelineActivity, ArrayList<Tweet> mTweets) {
@@ -93,7 +84,7 @@ public class TweetAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         RecyclerView.ViewHolder mViewHolder = null;
 
 
-        switch (viewType){
+        switch (viewType) {
             case IMAGE: {
                 View view = mLayoutInflater.inflate(R.layout.activity_tweet, parent, false);
                 mViewHolder = new ViewHolder(view);
@@ -101,8 +92,8 @@ public class TweetAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
             }
 
-            case VIDEO:{
-                View view = mLayoutInflater.inflate(R.layout.activity_tweet_video_layout, parent,false);
+            case VIDEO: {
+                View view = mLayoutInflater.inflate(R.layout.activity_tweet_video_layout, parent, false);
                 mViewHolder = new ViewHolderVideo(view);
             }
         }
@@ -122,7 +113,7 @@ public class TweetAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             viewHolder.mTvTweetScreenName.setText("@" + tweet.getUser().getScreenName());
             viewHolder.mTvTweetDescription.setText(AppUtils.fromHtml(tweet.getBody()));
             viewHolder.mTvTweetHours.setText(AppUtils.getTwitterDateFormat(tweet.getCreatedAt()));
-            viewHolder.mTvFavouriteCount.setText(String.valueOf(tweet.getFavCount()));
+//            viewHolder.mTvFavouriteCount.setText(String.valueOf(tweet.getFavCount()));
             Glide.with(holder.itemView.getContext()).load(tweet.getUser().getProfileImageUrl()).into(viewHolder.mImgUserProfile);
 
             List<Media> medias = tweet.getEntity().getMedias();
@@ -132,7 +123,7 @@ public class TweetAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     String mediaUrl = media.getMediaURL();
                     Glide.with(mTimelineActivity).load(mediaUrl).into(viewHolder.mImgUserTweetProfile);
                     viewHolder.mImgUserTweetProfile.setVisibility(View.VISIBLE);
-                }else{
+                } else {
                     viewHolder.mImgUserTweetProfile.setVisibility(View.GONE);
                 }
             } else {
@@ -145,6 +136,21 @@ public class TweetAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     mTimelineActivity.displayTweet(tweet);
                 }
             });
+
+            viewHolder.mTvTweetDescription.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+                    PendingIntent pendingIntent = getPendingIntent(tweet.getUser().getWebUrl());
+                    Bitmap bitmap = BitmapFactory.decodeResource(mTimelineActivity.getResources(), R.drawable.share_icon);
+                    builder.setActionButton(bitmap, "Share", pendingIntent);
+                    CustomTabsIntent intentCustomTab = builder.build();
+                    intentCustomTab.launchUrl(mTimelineActivity, Uri.parse(tweet.getUser().getWebUrl()));
+                    builder.setToolbarColor(ContextCompat.getColor(mTimelineActivity, R.color.colorAccent));
+
+                }
+            });
+
 
         } else {
             final ViewHolderVideo viewHolderVideo = (ViewHolderVideo) holder;
@@ -163,7 +169,7 @@ public class TweetAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     viewHolderVideo.textureViewVideo.start();
                 }
 
-            }else{
+            } else {
                 viewHolderVideo.textureViewVideo.setVisibility(View.GONE);
                 viewHolderVideo.fullScreenMediaPlayerController.setVisibility(View.GONE);
 
@@ -172,8 +178,6 @@ public class TweetAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         }
     }
-
-
 
 
     private PendingIntent getPendingIntent(String url) {
@@ -193,7 +197,7 @@ public class TweetAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
         protected TextView mTvTweetUserName;
         protected ImageView mImgUserProfile;
@@ -215,13 +219,13 @@ public class TweetAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             mTvTweetDescription = (TextView) itemView.findViewById(R.id.tv_tweet_description);
             mImgUserTweetProfile = (ImageView) itemView.findViewById(R.id.img_user_tweet_profile);
             mTvImgDescription = (TextView) itemView.findViewById(R.id.tv_img_description);
-            mTvFavouriteCount = (TextView) itemView.findViewById(R.id.tv_favourite_count);
-            mImgReplyTweet = (ImageView) itemView.findViewById(R.id.img_reply);
+//            mTvFavouriteCount = (TextView) itemView.findViewById(R.id.tv_favourite_count);
+//            mImgReplyTweet = (ImageView) itemView.findViewById(R.id.img_reply);
         }
 
     }
 
-    public class ViewHolderVideo extends RecyclerView.ViewHolder{
+    public class ViewHolderVideo extends RecyclerView.ViewHolder {
 
         protected TextView mVTvTweetUserName;
         protected ImageView mVImgUserProfile;
@@ -229,7 +233,7 @@ public class TweetAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         protected TextView mVTvTweetHours;
         protected TextView mVTvTweetDescription;
         protected TextView mVTvImgDescription;
-        final  FensterVideoView textureViewVideo;
+        final FensterVideoView textureViewVideo;
         final MediaFensterPlayerController fullScreenMediaPlayerController;
 
 
@@ -249,8 +253,6 @@ public class TweetAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
 
     }
-
-
 
 
 }

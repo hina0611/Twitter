@@ -1,5 +1,7 @@
 package com.codepath.apps.restclienttemplate.data;
 
+import android.os.Parcelable;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -12,7 +14,7 @@ import java.util.List;
  * Created by hinaikhan on 9/29/17.
  */
 @Parcel
-public class Media {
+public class Media implements Parcelable {
 
     public long mId;
     private String type;
@@ -98,4 +100,35 @@ public class Media {
     public boolean isVideo() {
         return this.type.equalsIgnoreCase("video");
     }
+
+    public Media(android.os.Parcel in) {
+        mId = in.readLong();
+        type = in.readString();
+        mediaURL = in.readString();
+    }
+
+    @Override
+    public void writeToParcel(android.os.Parcel dest, int flags) {
+        dest.writeLong(mId);
+        dest.writeString(type);
+        dest.writeString(mediaURL);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<Media> CREATOR = new Creator<Media>() {
+        @Override
+        public Media createFromParcel(android.os.Parcel in) {
+            return new Media(in);
+        }
+
+        @Override
+        public Media[] newArray(int size) {
+            return new Media[size];
+        }
+    };
+
 }

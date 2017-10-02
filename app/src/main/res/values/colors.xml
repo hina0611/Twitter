@@ -8,6 +8,8 @@
     <color name="color_dialog">#ffcc99</color>
     <color name="color_dialog_color">#cc9766</color>
     <color name="dialog_text_color">#660033</color>
-    <color name="color_text">#4c341a</color>
+    <color name="color_text">#072D3D</color>
     <color name="color_bg">#f2e6d9</color>
+    <color name="twitter_color">#1DA1F2</color>
+    <color name="color_black">#000000</color>
 </resources>

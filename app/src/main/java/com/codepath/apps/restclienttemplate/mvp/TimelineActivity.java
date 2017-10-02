@@ -1,9 +1,12 @@
 package com.codepath.apps.restclienttemplate.mvp;
 
+import android.Manifest;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,6 +14,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.codepath.apps.restclienttemplate.R;
@@ -35,6 +39,7 @@ public class TimelineActivity extends AppCompatActivity {
     private LinearLayoutManager layoutManager = new LinearLayoutManager(this);
     private long maxId = 0;
     private FloatingActionButton fabPostTWeet;
+    public static int REQUEST_PERMISSIONS = 999;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +56,7 @@ public class TimelineActivity extends AppCompatActivity {
         mRvTweet = (RecyclerView) findViewById(R.id.rvTweeterClient);
 
         bindListeners();
+        checkPermission();
     }
 
     // Menu icons are inflated just as they were with actionbar
@@ -60,6 +66,7 @@ public class TimelineActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.main_menu, menu);
         return true;
     }
+
 
     private void fetchTimeLineHandlerData(long maxId){
         TimeLinePresenter mTimeLinePresenter = new TimeLinePresenter(this);
@@ -125,6 +132,16 @@ public class TimelineActivity extends AppCompatActivity {
     private void composeTweet(){
         PostTweetFragment dialogFragment = new PostTweetFragment();
         dialogFragment.show(getFragmentManager(), "Show data");
+    }
+
+    private void checkPermission() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (checkSelfPermission(Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED
+                    || checkSelfPermission(Manifest.permission.ACCESS_NETWORK_STATE) != PackageManager.PERMISSION_GRANTED) {
+                String[] perms = {Manifest.permission.INTERNET, Manifest.permission.ACCESS_NETWORK_STATE};
+                requestPermissions(perms, REQUEST_PERMISSIONS);
+            }
+        }
     }
 
 }

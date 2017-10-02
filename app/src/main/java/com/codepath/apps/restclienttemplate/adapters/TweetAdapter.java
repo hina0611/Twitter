@@ -2,6 +2,13 @@ package com.codepath.apps.restclienttemplate.adapters;
 
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Build;
+import android.provider.Settings;
+import android.support.customtabs.CustomTabsIntent;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.util.Log;
@@ -85,6 +92,7 @@ public class TweetAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         mLayoutInflater = LayoutInflater.from(mTimelineActivity);
         RecyclerView.ViewHolder mViewHolder = null;
 
+
         switch (viewType){
             case IMAGE: {
                 View view = mLayoutInflater.inflate(R.layout.activity_tweet, parent, false);
@@ -107,7 +115,6 @@ public class TweetAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         final Tweet tweet = mTweets.get(position); // get data as per position
         User user = tweet.getUser();
         Entity entity = tweet.getEntity();
-        Log.d("TweetAdapter.onBindView", "Displaying tweet: " + tweet.getUid());
 
         if (holder instanceof ViewHolder) {
             ViewHolder viewHolder = (ViewHolder) holder;
@@ -123,11 +130,14 @@ public class TweetAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 Media media = medias.get(0);
                 if (media.isPhoto()) {
                     String mediaUrl = media.getMediaURL();
-                    Log.d("TweetAdapter.onBindView", "For tweet: " + tweet.getUid() + ", media Url: " + mediaUrl);
-                    Glide.with(mTimelineActivity).load(media.getMediaURL()).into(viewHolder.mImgUserTweetProfile);
+                    Glide.with(mTimelineActivity).load(mediaUrl).into(viewHolder.mImgUserTweetProfile);
+                    viewHolder.mImgUserTweetProfile.setVisibility(View.VISIBLE);
+                }else{
+                    viewHolder.mImgUserTweetProfile.setVisibility(View.GONE);
                 }
+            } else {
+                viewHolder.mImgUserTweetProfile.setVisibility(View.GONE);
             }
-
 
             viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -136,17 +146,11 @@ public class TweetAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 }
             });
 
-            viewHolder.mImgReplyTweet.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mTimelineActivity.displayTweet(tweet);
-                }
-            });
         } else {
             final ViewHolderVideo viewHolderVideo = (ViewHolderVideo) holder;
             viewHolderVideo.mVTvTweetUserName.setText(tweet.getUser().getName());
             viewHolderVideo.mVTvTweetScreenName.setText("@" + tweet.getUser().getScreenName());
-            viewHolderVideo.mVTvTweetDescription.setText(Html.fromHtml(tweet.getBody()));
+            viewHolderVideo.mVTvTweetDescription.setText(AppUtils.fromHtml(tweet.getBody()));
 
             if (tweet.getExtendedEntity() != null && tweet.getExtendedEntity().getVideoInfo() != null
                     && tweet.getExtendedEntity().getVideoInfo().getVariants().size() > 0
@@ -159,10 +163,17 @@ public class TweetAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     viewHolderVideo.textureViewVideo.start();
                 }
 
+            }else{
+                viewHolderVideo.textureViewVideo.setVisibility(View.GONE);
+                viewHolderVideo.fullScreenMediaPlayerController.setVisibility(View.GONE);
+
+
             }
 
         }
     }
+
+
 
 
     private PendingIntent getPendingIntent(String url) {
@@ -235,9 +246,9 @@ public class TweetAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
 
         }
+
+
     }
-
-
 
 
 

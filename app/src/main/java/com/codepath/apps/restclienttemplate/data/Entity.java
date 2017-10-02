@@ -25,22 +25,6 @@ public class Entity implements Parcelable{
 
     }
 
-    protected Entity(android.os.Parcel in) {
-
-    }
-
-    public static final Creator<Entity> CREATOR = new Creator<Entity>() {
-        @Override
-        public Entity createFromParcel(android.os.Parcel in) {
-            return new Entity(in);
-        }
-
-        @Override
-        public Entity[] newArray(int size) {
-            return new Entity[size];
-        }
-    };
-
     public List<Media> getMedias() {
         return medias;
     }
@@ -82,7 +66,25 @@ public class Entity implements Parcelable{
         return 0;
     }
 
+    protected Entity(android.os.Parcel in) {
+        medias = in.readArrayList(Media.class.getClassLoader());
+    }
+
     @Override
     public void writeToParcel(android.os.Parcel dest, int flags) {
+        dest.writeList(medias);
     }
+
+    public static final Creator<Entity> CREATOR = new Creator<Entity>() {
+        @Override
+        public Entity createFromParcel(android.os.Parcel in) {
+            return new Entity(in);
+        }
+
+        @Override
+        public Entity[] newArray(int size) {
+            return new Entity[size];
+        }
+    };
+
 }

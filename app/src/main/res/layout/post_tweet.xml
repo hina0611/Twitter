@@ -22,17 +22,17 @@
             android:id="@+id/compose_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toLeftOf="@+id/compose_profile" />
+            android:layout_toLeftOf="@+id/img_compose_profile" />
 
         <TextView
             android:id="@+id/compose_user_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/compose_name"
-            android:layout_toLeftOf="@+id/compose_profile" />
+            android:layout_toLeftOf="@+id/img_compose_profile" />
 
         <ImageView
-            android:id="@+id/compose_profile"
+            android:id="@+id/img_compose_profile"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_alignParentRight="true" />
@@ -67,14 +67,19 @@
             android:layout_alignBottom="@+id/compose_btn"
             android:id="@+id/tv_tweet_character_count"
             android:layout_width="wrap_content"
+            android:textColor="@color/color_black"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:layout_marginRight="18dp"
+            android:layout_marginBottom="16dp"
             android:layout_height="wrap_content" />
 
         <Button
             android:textColor="@android:color/white"
-            android:background="@drawable/ic_favorite"
+            android:background="@drawable/twitter_message"
             android:id="@+id/compose_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_alignParentRight="true"
             android:text="Tweet" />
     </RelativeLayout>
